@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QLNSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CHUCVU">
+    <Key>
+      <PropertyRef Name="MaChucVu" />
+    </Key>
+    <Property Name="MaChucVu" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TenChucVu" Type="nvarchar" MaxLength="50" />
+    <Property Name="PhuCap" Type="float" />
+  </EntityType>
+  <EntityType Name="DMPHONG">
+    <Key>
+      <PropertyRef Name="MaPhong" />
+    </Key>
+    <Property Name="MaPhong" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TenPhong" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="DSNV">
+    <Key>
+      <PropertyRef Name="MaNV" />
+    </Key>
+    <Property Name="MaNV" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="HoTen" Type="nvarchar" MaxLength="50" />
+    <Property Name="NgaySinh" Type="date" />
+    <Property Name="GioiTinh" Type="bit" />
+    <Property Name="MaPhong" Type="nvarchar" MaxLength="50" />
+    <Property Name="MaChucVu" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="HeSoLuong" Type="float" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_DSNV_CHUCVU">
+    <End Role="CHUCVU" Type="Self.CHUCVU" Multiplicity="1" />
+    <End Role="DSNV" Type="Self.DSNV" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CHUCVU">
+        <PropertyRef Name="MaChucVu" />
+      </Principal>
+      <Dependent Role="DSNV">
+        <PropertyRef Name="MaChucVu" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DSNV_DMPHONG">
+    <End Role="DMPHONG" Type="Self.DMPHONG" Multiplicity="0..1" />
+    <End Role="DSNV" Type="Self.DSNV" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DMPHONG">
+        <PropertyRef Name="MaPhong" />
+      </Principal>
+      <Dependent Role="DSNV">
+        <PropertyRef Name="MaPhong" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QLNSModelStoreContainer">
+    <EntitySet Name="CHUCVU" EntityType="Self.CHUCVU" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DMPHONG" EntityType="Self.DMPHONG" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DSNV" EntityType="Self.DSNV" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_DSNV_CHUCVU" Association="Self.FK_DSNV_CHUCVU">
+      <End Role="CHUCVU" EntitySet="CHUCVU" />
+      <End Role="DSNV" EntitySet="DSNV" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DSNV_DMPHONG" Association="Self.FK_DSNV_DMPHONG">
+      <End Role="DMPHONG" EntitySet="DMPHONG" />
+      <End Role="DSNV" EntitySet="DSNV" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QLNSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CHUCVU">
+    <Key>
+      <PropertyRef Name="MaChucVu" />
+    </Key>
+    <Property Name="MaChucVu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TenChucVu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PhuCap" Type="Double" />
+    <NavigationProperty Name="DSNVs" Relationship="Self.FK_DSNV_CHUCVU" FromRole="CHUCVU" ToRole="DSNV" />
+  </EntityType>
+  <EntityType Name="DMPHONG">
+    <Key>
+      <PropertyRef Name="MaPhong" />
+    </Key>
+    <Property Name="MaPhong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TenPhong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DSNVs" Relationship="Self.FK_DSNV_DMPHONG" FromRole="DMPHONG" ToRole="DSNV" />
+  </EntityType>
+  <EntityType Name="DSNV">
+    <Key>
+      <PropertyRef Name="MaNV" />
+    </Key>
+    <Property Name="MaNV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="HoTen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgaySinh" Type="DateTime" Precision="0" />
+    <Property Name="GioiTinh" Type="Boolean" />
+    <Property Name="MaPhong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaChucVu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="HeSoLuong" Type="Double" />
+    <NavigationProperty Name="CHUCVU" Relationship="Self.FK_DSNV_CHUCVU" FromRole="DSNV" ToRole="CHUCVU" />
+    <NavigationProperty Name="DMPHONG" Relationship="Self.FK_DSNV_DMPHONG" FromRole="DSNV" ToRole="DMPHONG" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_DSNV_CHUCVU">
+    <End Role="CHUCVU" Type="Self.CHUCVU" Multiplicity="1" />
+    <End Role="DSNV" Type="Self.DSNV" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CHUCVU">
+        <PropertyRef Name="MaChucVu" />
+      </Principal>
+      <Dependent Role="DSNV">
+        <PropertyRef Name="MaChucVu" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DSNV_DMPHONG">
+    <End Role="DMPHONG" Type="Self.DMPHONG" Multiplicity="0..1" />
+    <End Role="DSNV" Type="Self.DSNV" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DMPHONG">
+        <PropertyRef Name="MaPhong" />
+      </Principal>
+      <Dependent Role="DSNV">
+        <PropertyRef Name="MaPhong" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QLNSEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CHUCVUs" EntityType="Self.CHUCVU" />
+    <EntitySet Name="DMPHONGs" EntityType="Self.DMPHONG" />
+    <EntitySet Name="DSNVs" EntityType="Self.DSNV" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_DSNV_CHUCVU" Association="Self.FK_DSNV_CHUCVU">
+      <End Role="CHUCVU" EntitySet="CHUCVUs" />
+      <End Role="DSNV" EntitySet="DSNVs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DSNV_DMPHONG" Association="Self.FK_DSNV_DMPHONG">
+      <End Role="DMPHONG" EntitySet="DMPHONGs" />
+      <End Role="DSNV" EntitySet="DSNVs" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
